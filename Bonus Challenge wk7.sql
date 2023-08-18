@@ -1,0 +1,24 @@
+with cate as (
+	select id as category_id, level_text as category
+	from product_hierarchy
+    where level_name = 'Category'),
+seg as (
+		select id as segment_id, level_text as segment_name, parent_id as gender
+	from product_hierarchy
+    where level_name = 'Segment'),
+style as (
+	select product_id, price, level_text as style_name, p.id as style_id, parent_id as type
+    from product_hierarchy as p
+    inner join product_prices using(id)
+    where level_name = 'Style'),
+combine as (
+	select product_id, price, category_id, segment_id, style_id, segment_name, category, style_name
+	from style
+	inner join seg on type = segment_id
+	inner join cate on category_id = gender),
+concat_name as (
+	select product_id, price, concat(style_name, " ", Segment_name, " - ", Category) as product_name,
+		category_id, segment_id, style_id, segment_name, category, style_name
+	from combine)
+select *
+from concat_name
