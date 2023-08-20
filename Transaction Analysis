@@ -1,0 +1,37 @@
+## Transaction analysis
+-- How many unique transactions were there?
+select count(distinct txn_id) as num_unique_trnsaction
+from sales;
+
+-- What is the average unique products purchased in each transaction?
+select round(avg(unique_product)) as avg_unique_purchase
+from (select txn_id, count(distinct prod_id) as unique_product
+		from sales group by txn_id) as uniquiue_txn;
+
+-- What is the average discount value per transaction?
+select avg(discount*qty*price/100) as avg_discounts
+from sales;
+
+-- What is the percentage split of all transactions for members vs non-members?
+select round(num_member*100/(num_member + num_non_member)) as percentage_member,
+	 round(num_non_member*100/(num_member + num_non_member)) as percentage_non_member
+from (select count(distinct txn_id) as num_member
+		from sales
+		where member = TRUE) as m,
+	(select count(distinct txn_id) as num_non_member
+		from sales
+		where member = FALSE) as nm;
+ 
+-- What is the average revenue for member transactions and non-member transactions
+with txn_sales as (select *, (qty*price) as goods_amount, (discount*qty*price/100) as discount_amount
+		from sales),
+non_member as (select round(avg(goods_amount- discount_amount), 2) as non_member_revenue
+		from txn_sales
+		where member = FALSE),
+members as (select round(avg(goods_amount- discount_amount), 2) as member_revenue
+		from txn_sales
+		where member = TRUE)
+select member_revenue, non_member_revenue
+from members, non_member;
+
+
