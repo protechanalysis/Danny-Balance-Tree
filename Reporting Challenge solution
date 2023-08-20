@@ -1,0 +1,9 @@
+-- create a table that contains only sales_monthly transaction for only that nonth
+-- in that year 
+drop table if exists balanced_tree.sales_monthly_monthly_monthly;
+create table balanced_tree.sales_monthly_monthly_monthly as 
+select * 
+from sales_monthly_monthly
+where extract(month from start_txn_time) = 1
+select start_txn_time
+from balanced_tree.sales_monthly_monthly_monthly;
