@@ -1,0 +1,12 @@
+## High-Level Sales Analysis
+-- What was the total quantity sold for all products?
+select sum(qty)  as total_quantity_sold
+from sales;
+
+-- What is the total generated revenue for all products before discounts?
+select sum(qty*price) as gross_revenue
+from sales;
+
+-- What was the total discount amount for all products?
+select sum(discount*(qty*price)/100) as total_discount
+from sales;
