@@ -25,6 +25,8 @@ For this case study, there is a total of 4 datasets for this case study - howeve
 
 The following questions can be considered key business questions and metrics that the Balanced Tree team requires for their monthly reports.
 
+### NB: _This analysis was done using MYSQL workbench_
+
 ### High-Level Sales Analysis
 1.  What was the total quantity sold for all products?
 <details>
