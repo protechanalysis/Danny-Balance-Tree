@@ -18,6 +18,14 @@ limit 3;
 ```
 
 </details>
+
+### Output:
+product_name | total_revenue_bd
+-----|-----
+Blue Polo Shirt - Mens | 217683
+Grey Fashion Jacket - Womens | 209304
+White Tee Shirt - Mens | 152000
+
  
 2. What is the total quantity, revenue and discount for each segment?
 <details>
@@ -44,6 +52,15 @@ order by total_revenue desc;
 
 </details>
 
+### Output:
+segment_name | total_quantity | total_revenue | total_discount_given
+-----|-----|-----|-----
+Shirt | 11265 | 356548.73 | 49594.27
+Jacket | 11385 | 322705.54 | 44277.46
+Socks | 11217 | 270963.56 | 37013.44
+Jeans | 11349 | 183006.03 | 25343.97
+
+
 3. What is the top-selling product for each segment?
 <details>
 <summary>Click to show SQL query</summary>
@@ -65,6 +82,15 @@ ranking as (
 ```
 
 </details>
+
+### Output:
+segment_name | product_name | total_revenue
+-----|-----|-----
+Jacket | Grey Fashion Jacket - Womens | 209304
+Jeans | Black Straight Jeans - Womens | 121152
+Shirt | Blue Polo Shirt - Mens | 217683
+Socks | Navy Solid Socks - Mens | 136512
+
 
 4. What is the total quantity, revenue and discount for each category?
 <details>
@@ -90,6 +116,13 @@ order by total_revenue desc;
 ```
 </details>
 
+### Output:
+category_name | total_quantity | total_revenue | total_discount_given
+-----|-----|-----|-----
+Mens | 22482 | 627512.29 | 86607.71
+Womens | 22734 | 505711.57 | 69621.43
+
+
 5. What is the top selling product for each category?
 <details>
 <summary>Click to show SQL query</summary>
@@ -110,6 +143,13 @@ from ranking
 where rank_number = 1;
 ```
 </details>
+
+### Output:
+category_name | product_name | total_revenue_with_discount
+-----|-----|-----
+Mens | Blue Polo Shirt - Mens | 217683
+Womens | Grey Fashion Jacket - Womens | 209304
+
 
 6. What is the percentage split of revenue by product for each segment?
 <details>
@@ -136,6 +176,23 @@ order by segment_name, percentage_revenue desc;
 ```
 </details>
 
+### Output:
+segment_name | product_name | percentage_revenue
+-----|-----|-----
+Jacket | Grey Fashion Jacket - Womens | 56.99
+Jacket | Khaki Suit Jacket - Womens | 23.57
+Jacket | Indigo Rain Jacket - Womens | 19.44
+Jeans | Black Straight Jeans - Womens | 58.14
+Jeans | Navy Oversized Jeans - Womens | 24.04
+Jeans | Cream Relaxed Jeans - Womens | 17.82
+Shirt | Blue Polo Shirt - Mens | 53.53
+Shirt | White Tee Shirt - Mens | 37.48
+Shirt | Teal Button Up Shirt - Mens | 8.99
+Socks | Navy Solid Socks - Mens | 44.24
+Socks | Pink Fluro Polkadot Socks - Mens | 35.57
+Socks | White Striped Socks - Mens | 20.20
+
+
 7. What is the percentage split of revenue by segment for each category?
 <details>
 <summary>Click to show SQL query</summary>
@@ -161,6 +218,15 @@ order by segment_name;
 ```
 </details>
 
+### Output:
+category_name | segment_name | percentage_revenue
+-----|-----|-----
+Womens | Jacket | 63.81
+Womens | Jeans | 36.19
+Mens | Shirt | 56.82
+Mens | Socks |43.18
+
+
 8.  What is the percentage split of total revenue by category?
 <details>
 <summary>Click to show SQL query</summary>
@@ -182,6 +248,13 @@ from cate, (select sum(total_revenue) as cate_rev
 ```
 </details>
 
+### Output:
+category_name | percentage_revenve
+-----|-----
+Mens | 55.37
+Womens | 44.63
+
+
 9. What is the total transaction “penetration” for each product? (hint: penetration = number of transactions
 -- where at least 1 quantity of a product was purchased divided by total number of transactions)
 <details>
@@ -202,6 +275,22 @@ cross join txn_count;
 ```
 
 </details>
+
+### Output:
+prod_id | num_product | num_distinct_txn | pentration_rate
+-----|-----|-----|-----
+f084eb | 1281 | 2500 | 51.24
+9ec847 | 1275 | 2500 | 51.00
+c4a632 | 1274 | 2500 | 50.96
+2a2353 | 1268 | 2500 | 50.72
+5d267b | 1268 | 2500 | 50.72
+2feb6b | 1258 | 2500 | 50.32
+72f5d4 | 1250 | 2500 | 50.00
+d5e9a6 | 1247 | 2500 | 49.88
+e83aa3 | 1246 | 2500 | 49.84
+b9a74d | 1243 | 2500 | 49.72
+e31d39 | 1243 | 2500 | 49.72
+c8d436 | 1242 | 2500 | 49.68
 
 
 10. What is the most common combination of at least 1 quantity of any 3 products in a 1 single transaction?
@@ -228,3 +317,8 @@ order by num_combination desc
 limit 1;
 ```
 </details>
+
+### Output:
+product_1 | product_2 | product_3 | num_combination
+-----|-----|-----|-----
+Grey Fashion Jacket - Womens | Teal Button Up Shirt - Mens | White Tee Shirt - Mens | 352
