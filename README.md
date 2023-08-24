@@ -78,10 +78,12 @@ total_discount|
 1.  How many unique transactions were there?
 <details>
 <summary>Click to show SQL query</summary>
+	
 ```sql
 select count(distinct txn_id) as num_unique_trnsaction
 from sales;
 ```
+	
 </details>
 
 #### Output:
@@ -92,11 +94,13 @@ num_unique_trnsaction|
 2.  What is the average unique products purchased in each transaction?
 <details>
 <summary>Click to show SQL query</summary>
+	
 ```sql
 select round(avg(unique_product)) as avg_unique_purchase
 from (select txn_id, count(distinct prod_id) as unique_product
 		from sales group by txn_id) as uniquiue_txn;
 ```
+
 </details>
 
 #### Output:
@@ -107,10 +111,12 @@ avg_unique_purchase|
 3.  What is the average discount value per transaction?
 <details>
 <summary>Click to show SQL query</summary>
+
 ```sql
 select round(avg(discount*qty*price/100),2) as avg_discount
 from sales;
 ```
+
 </details>
 
 #### Output:
@@ -121,6 +127,7 @@ avg_discount
 4.  What is the percentage split of all transactions for members vs non-members?
 <details>
 <summary>Click to show SQL query</summary>
+
 ```sql
 select round(num_member*100/(num_member + num_non_member)) as percentage_member,
 	 round(num_non_member*100/(num_member + num_non_member)) as percentage_non_member
@@ -131,6 +138,7 @@ from (select count(distinct txn_id) as num_member
 		from sales
 		where member = FALSE) as nm;
 ```
+
 </details>
 
 #### Output:
@@ -141,6 +149,7 @@ percentage_member | percentage_non_member|
 5.  What is the average revenue for member transactions and non-member transactions?
 <details>
 <summary>Click to show SQL query</summary>
+
 ```sql
 with txn_sales as (select *, (qty*price) as goods_amount, (discount*qty*price/100) as discount_amount
 		from sales),
@@ -153,6 +162,7 @@ members as (select round(avg(goods_amount- discount_amount), 2) as avg_member_re
 select member_revenue, non_member_revenue
 from members, non_member;
 ```
+
 </details>
 
 #### Output:
