@@ -1,17 +1,10 @@
 ## Product Analysis
 
-details>
-<summary>Click to show SQL query</summary>
-  
-```sql
-select sum(qty)  as total_quantity_sold
-from sales;
-```
-
-</details>
-
---  What are the top 3 products by total revenue before discount?
+1. What are the top 3 products by total revenue before discount?
 <details>
+<summary>Click to show SQL query</summary>
+	
+```sql
 with cal_quantity as (
 	select prod_id, sum(qty) as total_quantity, price
 	from sales
@@ -22,10 +15,15 @@ inner join product_details
 on prod_id = product_id
 order by total_revenue_bd desc
 limit 3;
+```
 
 </details>
  
- -- What is the total quantity, revenue and discount for each segment?
+2. What is the total quantity, revenue and discount for each segment?
+<details>
+<summary>Click to show SQL query</summary>
+	
+```sql
  with discount_tab as (
 	select *, round(discount*qty*price/100, 2) as discount_amount
     	from sales),
@@ -42,9 +40,15 @@ inner join product_details as c
 on prod_id = product_id
 group by segment_name
 order by total_revenue desc;
+```
 
+</details>
 
--- What is the top-selling product for each segment?
+3. What is the top-selling product for each segment?
+<details>
+<summary>Click to show SQL query</summary>
+	
+```sql
 with cal_quantity as (
 	select prod_id, sum(qty) as total_quantity
 from sales
@@ -58,9 +62,15 @@ ranking as (
 	select segment_name, product_name, total_revenue
 	from ranking 
 	where rank_number = 1;
+```
 
+</details>
 
--- What is the total quantity, revenue and discount for each category?
+4. What is the total quantity, revenue and discount for each category?
+<details>
+<summary>Click to show SQL query</summary>
+	
+```sql
 with discount_tab as (
 	select *, round(discount*qty*price/100, 2) as discount_amount
     	from sales),
@@ -77,9 +87,14 @@ inner join product_details as c
 on prod_id = product_id
 group by category_name
 order by total_revenue desc;
+```
+</details>
 
-
--- What is the top selling product for each category?
+5. What is the top selling product for each category?
+<details>
+<summary>Click to show SQL query</summary>
+	
+```sql
 with cal_quantity as (
 	select prod_id, sum(qty) as total_quantity
 from sales
@@ -93,9 +108,14 @@ ranking as (
 select category_name, product_name, total_revenue_with_discount
 from ranking 
 where rank_number = 1;
+```
+</details>
 
-
--- What is the percentage split of revenue by product for each segment?
+6. What is the percentage split of revenue by product for each segment?
+<details>
+<summary>Click to show SQL query</summary>
+	
+```sql
 with rev as (
 	select prod_id, sum(round(qty*(price*(1-discount/100)), 2)) as revenue
 from sales
@@ -113,9 +133,14 @@ select segment_name, product_name, round(total_revenue*100/seg_rev, 2) as percen
 from seg
 inner join seg_name using(segment_name)
 order by segment_name, percentage_revenue desc;
+```
+</details>
 
-
--- What is the percentage split of revenue by segment for each category?
+7. What is the percentage split of revenue by segment for each category?
+<details>
+<summary>Click to show SQL query</summary>
+	
+```sql
 with rev as (
 	select prod_id, sum(round(qty*(price*(1-discount/100)), 2)) as revenue
 	from sales
@@ -133,9 +158,14 @@ select category_name, segment_name, round(total_revenue*100/cate_rev, 2) as perc
 from cate
 inner join cate_name using(category_name)
 order by segment_name;
+```
+</details>
 
-
---  What is the percentage split of total revenue by category?
+8.  What is the percentage split of total revenue by category?
+<details>
+<summary>Click to show SQL query</summary>
+	
+```sql
 with rev as (
 	select prod_id, sum(round(qty*(price*(1-discount/100)), 2)) as revenue
 	from sales
@@ -149,9 +179,15 @@ cate as (
 select category_name, round(total_revenue*100/cate_rev,2) as percentage_revenve
 from cate, (select sum(total_revenue) as cate_rev 
 		from cate) as s;
+```
+</details>
 
--- What is the total transaction “penetration” for each product? (hint: penetration = number of transactions
+9. What is the total transaction “penetration” for each product? (hint: penetration = number of transactions
 -- where at least 1 quantity of a product was purchased divided by total number of transactions)
+<details>
+<summary>Click to show SQL query</summary>
+	
+```sql
 with prod_count as (
 	select prod_id, count(distinct txn_id) as num_product
 	from sales
@@ -163,9 +199,16 @@ txn_count as (
 select prod_id, num_product, num_distinct_txn, round(num_product/num_distinct_txn *100,2) as pentration_rate
 from prod_count
 cross join txn_count;
+```
+
+</details>
 
 
--- What is the most common combination of at least 1 quantity of any 3 products in a 1 single transaction?
+10. What is the most common combination of at least 1 quantity of any 3 products in a 1 single transaction?
+<details>
+<summary>Click to show SQL query</summary>
+	
+```sql
 with prod_name as (select product_name, txn_id
 from sales
 join product_details
@@ -183,3 +226,5 @@ from product_combination
 group by product_1, product_2, product_3
 order by num_combination desc
 limit 1;
+```
+</details>
